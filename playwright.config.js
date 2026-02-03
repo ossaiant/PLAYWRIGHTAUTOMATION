@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
+import { config } from 'node:process';
 
 /**
  * Read environment variables from file.
@@ -26,6 +27,9 @@ export default defineConfig({
 
     browserName : 'chromium',
     headless : false,
+    screenshot : 'on',
+    // trace : 'on', 
+    trace : 'retain-on-failure',
     
   }
 });

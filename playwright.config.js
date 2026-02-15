@@ -24,13 +24,25 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-
-    browserName : 'chromium',
-    headless : false,
-    screenshot : 'on',
-    // trace : 'on', 
-    trace : 'retain-on-failure',
-    
-  }
+    browserName: 'chromium',
+    headless: false,
+    // screenshot: 'on',
+    // // trace : 'on', 
+    // trace: 'retain-on-failure',
+    // proxy: {
+    //   server: 'http://127.0.0.1:1',
+    //   bypass: '*'
+    // }
+  //   // All requests we send go to this API endpoint.
+  //   baseURL: 'https://api.github.com',
+  //   extraHTTPHeaders: {
+  //     // We set this header per GitHub guidelines.
+  //     'Accept': 'application/vnd.github.v3+json',
+  //     // Add authorization token to all requests.
+  //     // Assuming personal access token available in the environment.
+  //     'Authorization': `token ${process.env.API_TOKEN}`,
+  //   }
+  // }
+  },
 });
 

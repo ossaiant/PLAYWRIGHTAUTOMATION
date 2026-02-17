@@ -11,9 +11,6 @@ dataset.forEach((data, index) => {
  {
    const poManager = new POManager(page);
     //js file- Login js, DashboardPage
-    const username = "anshika@gmail.com";
-    const password = "Iamking@000";
-    const productName = "ZARA COAT 3";
      const products = page.locator(".card-body");
      const loginPage = poManager.getLoginPage();
      await loginPage.goTo();

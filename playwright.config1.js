@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
 import { config } from 'node:process';
+import { use } from 'react';
 
 /**
  * Read environment variables from file.
@@ -15,32 +16,39 @@ import { config } from 'node:process';
  */
 export default defineConfig({
   testDir: './tests',
-  timeout: 80 * 1000,
+  timeout: 50 * 1000,
+  retries: 1,
 
   expect: {
     timeout: 5000
   },
 
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
+  projects: [
+    { name: 'chrome execution',
+        use: {
     browserName: 'chromium',
-    headless: false,
+    headless: true,
+    // screenshot: 'on',
+    // // trace : 'on', 
+    ...devices['iPhone 12 Pro Max'],
+    video: 'on',
+    // trace: 'retain-on-failure',
+
+  }
+    },
+      { name: 'firefox execution',
+        use: {
+    browserName: 'firefox',
+    headless: true,
     // screenshot: 'on',
     // // trace : 'on', 
     // trace: 'retain-on-failure',
 
-    // }
-  //   // All requests we send go to this API endpoint.
-  //   baseURL: 'https://api.github.com',
-  //   extraHTTPHeaders: {
-  //     // We set this header per GitHub guidelines.
-  //     'Accept': 'application/vnd.github.v3+json',
-  //     // Add authorization token to all requests.
-  //     // Assuming personal access token available in the environment.
-  //     'Authorization': `token ${process.env.API_TOKEN}`,
-  //   }
-  // }
-  },
+  }
+      }
+  ]
+  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+
 });
 

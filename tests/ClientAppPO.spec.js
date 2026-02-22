@@ -1,7 +1,7 @@
 const {test, expect} = require('@playwright/test');
 // const {customtest} = require('./utils/test-base');
 
- const {POManager} = require('./utils/pageobjects/POManager');
+ const {POManager} = require('../pageobjects/OrdersHistoryPage');
  //Json->string->js object
  const dataset = require('./utils/placeorderTestData.json');
 

@@ -1,48 +1,41 @@
-const { When, Then,Given } = require('@cucumber/cucumber')
- const {POManager} = require('./utils/pageobjects/POManager');
- const {test, expect,playwright} = require('@playwright/test');
+const { Given, When, Then } = require('@cucumber/cucumber');
+const { expect } = require('@playwright/test');
 
+Given(
+  'a login to Ecommerce application with username {string} and password {string}',
+  async function (username, password) {
+    const loginPage = this.poManager.getLoginPage();
+    await loginPage.goTo();
+    await loginPage.validLogin(username, password);
+  }
+);
 
- Given('a login to Ecommerce application with {username} and {password}', async function (username, password) {
-           // Write code here that turns the phrase above into concrete actions
-            const browser = await playwright.chromium.launch();
-           const context = await browser.newContext();
-             const page =  await context.newPage();
-           const poManager = new POManager(page);
-    //js file- Login js, DashboardPage
-     const products = page.locator(".card-body");
-     const loginPage = poManager.getLoginPage();
-     await loginPage.goTo();
-     await loginPage.validLogin(data.username,data.password);
-         });
+When('Add {string} to Cart', async function (productName) {
+  const dashboardPage = this.poManager.getDashboardPage();
+  await dashboardPage.searchProductAddCart(productName);
+  await dashboardPage.goToCart();
+});
 
-           When('Add {string} to Cart', async function (string) {
-           // Write code here that turns the phrase above into concrete actions
-             const dashboardPage = poManager.getDashboardPage();
-     await dashboardPage.searchProductAddCart(data.productName);
-     await dashboardPage.navigateToCart();
-         });
-       
-              Then('Verity {string} is displayed in the Cart', async function (string) {
-           // Write code here that turns the phrase above into concrete actions
-           const cartPage = poManager.getCartPage();
-    await cartPage.VerifyProductIsDisplayed(data.productName);
-    await cartPage.Checkout();
+Then(
+  'Verify {string} is displayed in the Cart',
+  async function (productName) {
+    const cartPage = this.poManager.getCartPage();
+    const result = await cartPage.verifyProductIsDisplayed(productName);
+    expect(result).toBeTruthy();
+  }
+);
 
-         });
+When('Enter valid details and Place the Order', async function () {
+  const cartPage = this.poManager.getCartPage();
+  await cartPage.checkout();
 
-              When('Enter valid details and Place the Order', async function () {
-           // Write code here that turns the phrase above into concrete actions
-           const ordersReviewPage = poManager.getOrdersReviewPage();
-    await ordersReviewPage.searchCountryAndSelect("ind","India");
-    const orderId = await ordersReviewPage.SubmitAndGetOrderId();
-   console.log(orderId);
-         });
+  const checkoutPage = this.poManager.getCheckoutPage();
+  await checkoutPage.placeOrder();
+});
 
-            Then('Verity oder in present in the OrderHistory', async function () {
-           // Write code here that turns the phrase above into concrete actions
-          await dashboardPage.navigateToOrders();
-   const ordersHistoryPage = poManager.getOrdersHistoryPage();
-   await ordersHistoryPage.searchOrderAndSelect(orderId);
-   expect(orderId.includes(await ordersHistoryPage.getOrderId())).toBeTruthy();
-         });
+Then('Verify order is present in the OrderHistory', async function () {
+  const ordersPage = this.poManager.getOrdersPage();
+  await ordersPage.goToOrders();
+  const result = await ordersPage.verifyOrderPresent();
+  expect(result).toBeTruthy();
+});

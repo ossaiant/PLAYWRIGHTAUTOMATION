@@ -1,28 +1,19 @@
-pipeline {
-    agent any
-
-    tools {
-        nodejs 'NodeJS'
+node {
+    stage('Checkout') {
+        checkout scm
     }
 
-    stages {
-        stage('Install dependencies') {
-            steps {
-                bat 'npm ci'
-                bat 'npx playwright install --with-deps'
-            }
-        }
-
-        stage('Run Playwright Cucumber tests') {
-            steps {
-                bat 'npx cucumber-js'
-            }
-        }
+    stage('Verify Node & NPM') {
+        bat 'node -v'
+        bat 'npm -v'
     }
 
-    post {
-        always {
-            archiveArtifacts artifacts: '**/reports/**', allowEmptyArchive: true
-        }
+    stage('Install dependencies') {
+        bat 'npm ci'
+        bat 'npx playwright install --with-deps'
+    }
+
+    stage('Run Playwright Cucumber tests') {
+        bat 'npx cucumber-js'
     }
 }
